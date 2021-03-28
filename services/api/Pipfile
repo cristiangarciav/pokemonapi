@@ -9,6 +9,7 @@ flask-restful = "*"
 flake8 = "*"
 pytest = "*"
 gunicorn = "*"
+requests = "*"
 
 [dev-packages]
 
