@@ -1,9 +1,7 @@
-# from src.resources.pokemon import ComparePokemon
 from src.app import app
 from mock_data import read_resource_mock_data
 import pytest
 import responses
-# import requests
 from src.resources.pokemon import Pokemon, PokeResource
 import json
 from flask.testing import FlaskClient
@@ -27,9 +25,6 @@ def test_get_compare_damage(client: FlaskClient) -> None:
     assert response.status_code == 405
     assert response.content_type == 'application/json'
     assert b'Error' in response.data
-
-
-# Testing POST methods:
 
 
 def test_get_common_moves(client: FlaskClient) -> None:
@@ -65,6 +60,10 @@ def test_simulate_create_pokemon() -> None:
     assert 'electric' in fighter.types
 
 
+# Test POST methods:
+
+# Testing the /compare_damage/ endpoint:
+
 def test_post_malformed_compare_damage_request(client: FlaskClient) -> None:
     '''Test a malformed request to the compare_damage endpoint
        by ommiting the "contender" variable
@@ -86,7 +85,7 @@ def test_post_malformed_compare_damage_request(client: FlaskClient) -> None:
 
 @responses.activate
 def test_post_compare_damage_not_found(client: FlaskClient) -> None:
-    ''' '''
+    '''Test an nonexistent resource_id to the /compare_damage/ endpoint '''
     resource_id = 'pikachuasdf'
     resource = PokeResource.pokemon
     api_url = 'https://pokeapi.co/api/v2'
@@ -129,21 +128,15 @@ def test_post_compare_damage_not_found(client: FlaskClient) -> None:
 
 @responses.activate
 def test_post_compare_damage_request(client: FlaskClient) -> None:
-    pokemon_list = ['pikachu', 'drapion']
-    resource = PokeResource.pokemon
-    for resource_id in pokemon_list:
-        api_url = 'https://pokeapi.co/api/v2'
-        api_url += f'/{resource.name}/{resource_id}/'
-        resource_data = read_resource_mock_data(resource, resource_id)
-        responses.add(
-            responses.GET,
-            api_url,
-            json=resource_data,
-            status=200
-        )
-    type_list = ['electric', 'dark', 'poison']
-    resource = PokeResource.type
-    for resource_id in type_list:
+    '''Test /compare_damage/ endpoint with a successfull response code 200'''
+    resources = {
+        'pikachu': PokeResource.pokemon,
+        'drapion': PokeResource.pokemon,
+        'electric': PokeResource.type,
+        'dark': PokeResource.type,
+        'poison': PokeResource.type,
+    }
+    for resource_id, resource in resources.items():
         api_url = 'https://pokeapi.co/api/v2'
         api_url += f'/{resource.name}/{resource_id}/'
         resource_data = read_resource_mock_data(resource, resource_id)
@@ -175,6 +168,120 @@ def test_post_compare_damage_request(client: FlaskClient) -> None:
         "Accept": mime_type
     }
     url = "/compare_damage"
+    response = client.post(url, data=json.dumps(data), headers=headers)
+    json_data = json.loads(response.data)
+    assert response.status_code == 200
+    assert response.content_type == 'application/json'
+    assert expected_data == json_data
+
+
+# Testing the /common_moves/ endpoint:
+
+def test_post_malformed_common_moves_request(client: FlaskClient) -> None:
+    '''Test a malformed request to the /common_moves/ endpoint
+       by mispelling the "pokemonList" variacdble in the posted data
+    '''
+    data = {
+        "pokemonListq":
+            ["drapion", "pikachu"]
+    }
+    mime_type = "application/json"
+    headers = {
+        "Content-Type": mime_type,
+        "Accept": mime_type
+    }
+    url = "/common_moves"
+    response = client.post(url, data=json.dumps(data), headers=headers)
+    assert response.status_code == 405
+    assert response.content_type == 'application/json'
+    assert b'Error' in response.data
+
+
+@responses.activate
+def test_post_common_moves_not_found(client: FlaskClient) -> None:
+    '''Test an nonexistent resource_id to the /common_moves/ endpoint '''
+    resource_id = 'pikachuasdf'
+    resource = PokeResource.pokemon
+    api_url = 'https://pokeapi.co/api/v2'
+    api_url += f'/{resource.name}/{resource_id}/'
+    response_data = """
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+        <meta charset="utf-8">
+        <title>Error</title>
+        </head>
+        <body>
+        <pre>Cannot POST /api/v2/pokemon/pikachuasdf</pre>
+        </body>
+        </html>
+    """
+    responses.add(
+        responses.GET,
+        api_url,
+        json=response_data,
+        status=404
+    )
+
+    data = {
+        "pokemonList":
+            ["pikachuasdf", "drapion"]
+    }
+    mime_type = "application/json"
+    headers = {
+        "Content-Type": mime_type,
+        "Accept": mime_type
+    }
+    url = "/common_moves"
+    response = client.post(url, data=json.dumps(data), headers=headers)
+    json_data = json.loads(response.data)
+    assert response.status_code == 424
+    assert response.content_type == 'application/json'
+    assert {"Error": "pikachuasdf is not a pokemon"} == json_data
+
+
+@responses.activate
+def test_post_common_moves_request(client: FlaskClient) -> None:
+    '''Test /common_moves/ endpoint with a successfull response code 200'''
+    resources = {
+        'grumpig': PokeResource.pokemon,
+        'drapion': PokeResource.pokemon,
+        'attract': PokeResource.move,
+        'brick-break': PokeResource.move,
+        'bulldoze': PokeResource.move,
+        'es': PokeResource.language
+    }
+    for resource_id, resource in resources.items():
+        api_url = 'https://pokeapi.co/api/v2'
+        api_url += f'/{resource.name}/{resource_id}/'
+        resource_data = read_resource_mock_data(resource, resource_id)
+        responses.add(
+            responses.GET,
+            api_url,
+            json=resource_data,
+            status=200
+        )
+
+    expected_data = {
+        "commonMoves": [
+            "Atracción",
+            "Demolición",
+            "Terratemblor"
+        ]
+    }
+    data = {
+        "pokemonList":
+            ["grumpig",
+             "drapion"],
+        "limit": "3",
+        "language": "es"
+    }
+    mime_type = "application/json"
+    headers = {
+        "Content-Type": mime_type,
+        "Accept": mime_type
+    }
+    url = "/common_moves"
     response = client.post(url, data=json.dumps(data), headers=headers)
     json_data = json.loads(response.data)
     assert response.status_code == 200

@@ -104,6 +104,7 @@ class CommonMoves(Resource):
             common_moves = set.intersection(*moves_list)
             status_code = 200
             common_moves = list(common_moves)
+            common_moves.sort()
             if limit != '*':
                 limit = int(limit)
                 print(f'limit: {limit}')
