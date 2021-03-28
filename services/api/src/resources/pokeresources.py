@@ -27,7 +27,7 @@ class ComparePokemon(Resource):
         posted_data = request.get_json()
         if 'fighter' not in posted_data or 'contender' not in posted_data:
             status_code = 405
-            response = ({"error": "malformed request"}, status_code)
+            response = ({"Error": "malformed request"}, status_code)
             return response
 
         fighter_id = str(posted_data['fighter'])
@@ -80,7 +80,7 @@ class CommonMoves(Resource):
              not posted_data['limit'].isnumeric())
                 ):
             status_code = 405
-            response = ({"error": "malformed request"}, status_code)
+            response = ({"Error": "malformed request"}, status_code)
             return response
         # By default the language = 'en' and there is no limit
         language = 'en'
@@ -91,7 +91,7 @@ class CommonMoves(Resource):
             limit = posted_data['limit']
 
         if language != 'en' and not is_valid_language(language):
-            return ({"error": "Invalid Language code"}, 405)
+            return ({"Error": "Invalid Language code"}, 405)
 
         pokemon_list = posted_data['pokemonList']
 

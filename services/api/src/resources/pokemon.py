@@ -87,7 +87,7 @@ def get_resource(resource_type: PokeResource, id_type: str) -> dict:
     if result.ok:
         return result.json()
     else:
-        error_msg = f'"{id_type}" is not a {resource_type.name}'
+        error_msg = f'{id_type} is not a {resource_type.name}'
         raise PokemonException(error_msg)
 
 
