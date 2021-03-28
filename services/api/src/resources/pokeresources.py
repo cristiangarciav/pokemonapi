@@ -107,7 +107,6 @@ class CommonMoves(Resource):
             common_moves.sort()
             if limit != '*':
                 limit = int(limit)
-                print(f'limit: {limit}')
                 common_moves = common_moves[:limit]
 
             if language != 'en':

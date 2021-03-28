@@ -18,3 +18,4 @@ RUN pipenv install --system --deploy
 COPY ./ ${PROJECTPATH}
 RUN adduser -D pythonuser
 USER pythonuser
+CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:5000 manage:app"]
