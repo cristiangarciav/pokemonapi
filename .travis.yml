@@ -4,16 +4,43 @@ python:
 sudo: required
 services:
   - docker
+env:
+  global:
+    # Setting the GIT SHA from the git head in order to use it in the deployment process
+    - SHA=$(git rev-parse HEAD)
+    # Diabling the interactive mode in the GCloud sdk installation
+    - CLOUDSDK_CORE_DISABLE_PROMPTS=1
 before_install:
+  # Decrypting the service-account.json.enc file
   - openssl aes-256-cbc -K $encrypted_9f3b5599b056_key -iv $encrypted_9f3b5599b056_iv -in service-account.json.enc -out service-account.json -d
+  # Installing the Gcloud SDK
   - curl https://sdk.cloud.google.com | bash > /dev/null;
+  # Setting the gcloud profile 
   - source $HOME/google-cloud-sdk/path.bash.inc
+  # Updating the kubernetes CLI 
   - gcloud components update kubectl
+  # Login to gcloud with the servie-account token
   - gcloud auth activate-service-account --key-file service-account.json
-
+  # Setting the GC project id: pokemonapi-309023
+  - gcloud config set project pokemonapi-309023
+  # Setting the GCloud Kubernetes location zone 
+  - gcloud config set compute/zone us-central1-c
+  # Getting the Kubernetes cluster credentials
+  - gcloud container clusters get-credentials poke-cluster
 before_script:
+  # Installing the docker-compose in order to run the pytest unit and integration tests
   - pip install docker-compose
+  # Logging in to docker hub
   - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
 script:
+  # Building the docker-compose container:
   - docker-compose build
+  # Running the pytest scenarios:
   - docker-compose run api sh -c  "pytest -v . && flake8"
+deploy:
+  provider: script
+  # If everything goes good we are going to deploy the image into Google Cloud provider
+  script: bash ./deploy.sh
+  # The deployment will only happen if there is a marge on the 'main' branch
+  on:
+    branch: main
