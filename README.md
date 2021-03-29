@@ -9,7 +9,7 @@ The app is written in Python with Flask Restful as the web framework. And has be
 
 # App Architecture
 
-The app is deployed into a Kubernetes Cluster. It uses Kubernetes Deployments, which will allows to scale the application. Deployments also provide additional features to control how new image updates are deployed and are handled on failures.
+The app is deployed into a Kubernetes Cluster. It uses Kubernetes Deployments, which will allow the application to be scaled. Deployments also provide additional features to control how new image updates are deployed and are handled on failures.
 
 - gUnicorn Application Server
 In order to run the Flask API an application server is required and gUnicorn is used in this implementation. The Kubernetes cluster is being configured to use 3 replicas of the gUnicorn server
@@ -22,7 +22,7 @@ NGINX is a highly efficient, event-driven web server that is capable of handling
 
 # Remote Access
 
-The Application has been temporaly installed into a Google Cloud Kubernetes Cluster
+The Application has been temporarily installed into a Google Cloud Kubernetes Cluster
 and can be accessed through the below URL:
 
   https://35.192.16.221/
@@ -31,7 +31,7 @@ and can be accessed through the below URL:
 
 ## Local Installation
 
-You can clone the respository to your machine in order to run the API locally:
+You can clone the repository to your machine in order to run the API locally:
   ```bash
   $ git clone https://github.com/cristiangarciav/pokemonapi.git
   ```
@@ -82,37 +82,37 @@ documentation](https://docs.docker.com/compose/gettingstarted/).
 ├── deploy.sh
 ├── docker-compose.yaml
 ├── k8s
-│   ├── api-cluster-ip-service.yaml
-│   ├── api-deployment.yaml
-│   └── ingress-service.yaml
+│   ├── api-cluster-ip-service.yaml
+│   ├── api-deployment.yaml
+│   └── ingress-service.yaml
 └── services
     └── api
         ├── Dockerfile
         ├── manage.py
         ├── src
-        │   ├── app.py
-        │   ├── handlers
-        │   │   └── routes.py
-        │   ├── resources
-        │   │   ├── pokemon.py
-        │   │   └── pokeresources.py
-        │   └── templates
-        │       └── index.html
+        │   ├── app.py
+        │   ├── handlers
+        │   │   └── routes.py
+        │   ├── resources
+        │   │   ├── pokemon.py
+        │   │   └── pokeresources.py
+        │   └── templates
+        │       └── index.html
         └── test
             ├── get_mock_data.py
             ├── mock_data
-            │   ├── language_es_mock.json
-            │   ├── move_attract_mock.json
-            │   ├── move_brick-break_mock.json
-            │   ├── move_bulldoze_mock.json
-            │   ├── pokemon_arceus_mock.json
-            │   ├── pokemon_charmander_mock.json
-            │   ├── pokemon_drapion_mock.json
-            │   ├── pokemon_grumpig_mock.json
-            │   ├── pokemon_pikachu_mock.json
-            │   ├── type_dark_mock.json
-            │   ├── type_electric_mock.json
-            │   └── type_poison_mock.json
+            │   ├── language_es_mock.json
+            │   ├── move_attract_mock.json
+            │   ├── move_brick-break_mock.json
+            │   ├── move_bulldoze_mock.json
+            │   ├── pokemon_arceus_mock.json
+            │   ├── pokemon_charmander_mock.json
+            │   ├── pokemon_drapion_mock.json
+            │   ├── pokemon_grumpig_mock.json
+            │   ├── pokemon_pikachu_mock.json
+            │   ├── type_dark_mock.json
+            │   ├── type_electric_mock.json
+            │   └── type_poison_mock.json
             ├── mock_data.py
             └── test_pokemonapi.py      
 ```
@@ -124,11 +124,123 @@ While organizing the components into the "services" folder is possible to scale 
   Example:
   - Front-end service.
   - Static web content service.
-  - Data base service.
+  - Database service.
 
 ## K8s Folder:
-The "k8s" folder contains the Kubernetes cluster configuration files. The Cluster is configured to have 3 api deployment replicas and an ingress-nginx services that acts as a load balancer. 
+The "k8s" folder contains the Kubernetes cluster configuration files. The Cluster is configured to have 3 api deployment replicas and an ingress-nginx service that acts as a load balancer. 
 Each "api" pod has a WSGI Gunicorn server that can be scaled up to serve the requests from the clients.
 
+# Deployment:
+
+The app has been deployed into Google Cloud infrastructure, by making use of the Kubernetes cluster.
 
 
+# Continuous Integration:
+
+The app has been set up to make use of a CI automated pipeline that pushes all the changes into the github repository and runs a pytest testing scenario. If the build is successful and merged into the "main" branch, it is automatically deployed into the Google Cloud infrastructure.
+
+
+###Pokemon API
+###API and SDK Documentation
+
+#Common moves end-point: 
+    Compare shared common moves between a list of pokemon(s)
+
+Methods:
+
+    POST:
+    /common_moves
+
+Parameters:
+  Body parameters
+
+  Description:
+  ```console
+   {
+      Required: pokemonList
+      pokemonList:	
+        [
+          type: string
+          example: pikachu
+        ]
+      language:	
+          type: string
+          example: es
+      limit:	
+          type: integer (int32)
+          description: limit of output elements
+          example: 10
+    }
+  ```
+#Responses:
+Status: 200 - successful operation
+Schema:
+```console
+ {
+  commonMoves:	
+  [
+    type: string
+    example: Atraccion, Electrico
+  ]
+}
+```
+Status: 404 - Invalid resource parameter
+Status: 405 - Malformed request
+Status: 424 - External resource not responding
+
+#Compare Damage End-Point: 
+    Compare the deal and received damage from two Pokemons
+
+Methods:
+
+    POST:
+    /compare_damage
+
+Parameters:
+  Body parameters
+
+  Description:
+  ```console
+   {
+    Required: 
+      - contender
+      - fighter
+      fighter:	
+          type: string
+          description: Pokemon name/id
+          example: pikachu
+      contender:	
+          type: string
+          description: Pokemon name/id
+          example: charmander
+    }
+  ```
+#Responses:
+Status: 200 - successful operation
+Schema:
+```console
+      {
+        fighter: {
+          name:	
+            type: string
+            example: pikachu
+          id:	
+            type: integer (int32)
+            example: 25
+          types:	
+            [
+            type: string
+            example: electric
+            ]
+          deal_damage:	
+            type: integer (int32)
+            example: 2
+          receive_damage:	
+            type: integer (int32)
+            example: 1
+        }
+      }
+```
+Status: 404 - Invalid resource parameter
+Status: 405 - Malformed request
+Status: 424 - External resource not responding
