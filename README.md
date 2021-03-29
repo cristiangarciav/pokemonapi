@@ -185,7 +185,9 @@ Schema:
 }
 ```
 Status: 404 - Invalid resource parameter
+
 Status: 405 - Malformed request
+
 Status: 424 - External resource not responding
 
 #Compare Damage End-Point: 
@@ -242,5 +244,7 @@ Schema:
       }
 ```
 Status: 404 - Invalid resource parameter
+
 Status: 405 - Malformed request
+
 Status: 424 - External resource not responding
