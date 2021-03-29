@@ -1,10 +1,28 @@
 # Pokemon API project
 
-This is a sample rest API that provides information in order to be ready for the Pokemon Battle!
+This is a sample rest API that provides information to be ready for the Pokemon Battle!
+
+# App Description
+
+The app is written in Python with Flask Restful as the web framework. And has been validated with the Open API v 2.0 specification. 
+> File: pokemonapi_spec.json
+
+# App Architecture
+
+The app is deployed into a Kubernetes Cluster. It uses Kubernetes Deployments, which will allows to scale the application. Deployments also provide additional features to control how new image updates are deployed and are handled on failures.
+
+- gUnicorn Application Server
+In order to run the Flask API an application server is required and gUnicorn is used in this implementation. The Kubernetes cluster is being configured to use 3 replicas of the gUnicorn server
+
+- NGINX Web Server
+A web server will handle all incoming requests, and then reverse proxy them to the application server. While the container could run the application server alone, a web server provides more control over the traffic hitting the Flask API.
+
+NGINX is a highly efficient, event-driven web server that is capable of handling high volumes of traffic.
+
 
 # Remote Access
 
-This Pokemon API has been temporaly installed into a Google Cloud Kubernetes Cluster
+The Application has been temporaly installed into a Google Cloud Kubernetes Cluster
 and can be accessed through the below URL:
 
   https://35.192.16.221/
@@ -61,29 +79,21 @@ documentation](https://docs.docker.com/compose/gettingstarted/).
 ### Project Structure:
 
 ```console
-├── README.md
-├── cheat_sheet
 ├── deploy.sh
 ├── docker-compose.yaml
 ├── k8s
 │   ├── api-cluster-ip-service.yaml
 │   ├── api-deployment.yaml
 │   └── ingress-service.yaml
-├── service-account.json.enc
 └── services
     └── api
         ├── Dockerfile
-        ├── Pipfile
-        ├── Pipfile.lock
         ├── manage.py
-        ├── requirements.txt
         ├── src
         │   ├── app.py
         │   ├── handlers
-        │   │   ├── __init__.py
         │   │   └── routes.py
         │   ├── resources
-        │   │   ├── __init__.py
         │   │   ├── pokemon.py
         │   │   └── pokeresources.py
         │   └── templates
@@ -106,3 +116,19 @@ documentation](https://docs.docker.com/compose/gettingstarted/).
             ├── mock_data.py
             └── test_pokemonapi.py      
 ```
+## Services Folder:
+The "services" folder contains the application components/services that the application requires. In this case only one component exits: 
+  - The "api" service.
+ 
+While organizing the components into the "services" folder is possible to scale up the application easily by adding different services in the future. Each service folder may represent a docker container.
+  Example:
+  - Front-end service.
+  - Static web content service.
+  - Data base service.
+
+## K8s Folder:
+The "k8s" folder contains the Kubernetes cluster configuration files. The Cluster is configured to have 3 api deployment replicas and an ingress-nginx services that acts as a load balancer. 
+Each "api" pod has a WSGI Gunicorn server that can be scaled up to serve the requests from the clients.
+
+
+
