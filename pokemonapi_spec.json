@@ -1,0 +1,227 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "description": "This is a sample Pokemon API.\n",
+      "version": "1.0.0",
+      "title": "Pokemon API",
+      "termsOfService": "http://swagger.io/terms/",
+      "contact": {
+        "email": "jcristian.garcia@gmail.com"
+      },
+      "license": {
+        "name": "Apache 2.0",
+        "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+      }
+    },
+    "host": "virtserver.swaggerhub.com",
+    "basePath": "/cristiangarciav/PokemonAPI/1.0.0",
+    "tags": [
+      {
+        "name": "compare_damage",
+        "description": "Compare Pokemon Damage based on its type(s)",
+        "externalDocs": {
+          "description": "Find out more",
+          "url": "https://pokeapi.co/"
+        }
+      },
+      {
+        "name": "common_moves",
+        "description": "Compare shared Pokemon Moves",
+        "externalDocs": {
+          "description": "Find out more about Pokemons",
+          "url": "https://pokeapi.co/"
+        }
+      }
+    ],
+    "schemes": [
+      "https"
+    ],
+    "paths": {
+      "/compare_damage": {
+        "post": {
+          "tags": [
+            "Compare Damage"
+          ],
+          "summary": "Compare the deal and received damage from two Pokemons",
+          "operationId": "CompareDamage",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "Two pokemon names Fighter and Contender",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/CompareDamage"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "schema": {
+                "$ref": "#/definitions/CompareDamageResponse"
+              }
+            },
+            "404": {
+              "description": "Invalid resource parameter"
+            },
+            "405": {
+              "description": "Malformed request"
+            },
+            "424": {
+              "description": "External resource not responding"
+            }
+          }
+        }
+      },
+      "/common_moves": {
+        "post": {
+          "tags": [
+            "Common Moves"
+          ],
+          "summary": "Compare shared common moves between a list of pokemon(s)",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "A list of pokemon names, language and limit",
+              "required": false,
+              "schema": {
+                "$ref": "#/definitions/CommonMoves"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "schema": {
+                "$ref": "#/definitions/CommonMovesResponse"
+              }
+            },
+            "404": {
+              "description": "Invalid resource parameter"
+            },
+            "405": {
+              "description": "Malformed request"
+            },
+            "424": {
+              "description": "External resource not responding"
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "CompareDamage": {
+        "type": "object",
+        "required": [
+          "contender",
+          "fighter"
+        ],
+        "properties": {
+          "fighter": {
+            "type": "string",
+            "example": "pikachu",
+            "description": "Pokemon name/id"
+          },
+          "contender": {
+            "type": "string",
+            "example": "charmander",
+            "description": "Pokemon name/id"
+          }
+        }
+      },
+      "CompareDamageResponse": {
+        "type": "object",
+        "properties": {
+          "fighter": {
+            "$ref": "#/definitions/CompareDamageResponse_fighter"
+          }
+        }
+      },
+      "CommonMoves": {
+        "type": "object",
+        "required": [
+          "pokemonList"
+        ],
+        "properties": {
+          "pokemonList": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "pikachu"
+            }
+          },
+          "language": {
+            "type": "string",
+            "example": "es"
+          },
+          "limit": {
+            "type": "integer",
+            "format": "int32",
+            "example": 10,
+            "description": "limit of output elements"
+          }
+        }
+      },
+      "CommonMovesResponse": {
+        "type": "object",
+        "properties": {
+          "commonMoves": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "Atraccion, Electrico"
+            }
+          }
+        }
+      },
+      "CompareDamageResponse_fighter": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "pikachu"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "example": 25
+          },
+          "types": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "electric"
+            }
+          },
+          "deal_damage": {
+            "type": "integer",
+            "format": "int32",
+            "example": 2
+          },
+          "receive_damage": {
+            "type": "integer",
+            "format": "int32",
+            "example": 0
+          }
+        }
+      }
+    },
+    "externalDocs": {
+      "description": "Find out more about Pokemons",
+      "url": "https://pokeapi.co/"
+    }
+  }
