@@ -104,7 +104,7 @@ class CommonMoves(Resource):
             limit = posted_data['limit']
 
         if language != 'en' and not is_valid_language(language):
-            return ({"Error": "Invalid Language code"}, 405)
+            return ({"Error": "Invalid Language code"}, 404)
 
         pokemon_list = posted_data['pokemonList']
 
