@@ -142,13 +142,13 @@ Each "api" pod has a WSGI Gunicorn server that can be scaled up to attend the re
   ```
 Each yaml file represents a component insid inside the Kubernetes Cluster.
 
-# Deployment:
+## Deployment:
 
 The app has been deployed into Google Cloud infrastructure, by making use of the Kubernetes service. 3 Nodes has been setup hosting the 3 replica "api" pods. 
 The ingress service specifies the configuration of the NGINX Ingress Controller. For more information see the [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/).
 
 
-# Continuous Integration:
+## Continuous Integration:
 
 The app has been set up to make use of a CI automated pipeline by using the Travis CI service.  Travis CI is integrated with Github with below flow:
 
@@ -244,16 +244,16 @@ Status: 405 - Malformed request
 
 Status: 424 - External resource not responding
 
-# Usage and SDK Sample:
+## Usage and SDK Sample:
 
-## Curl Sample:
+### Curl Sample:
   ```console
     curl --insecure --header "Content-Type: application/json" \
   --request POST \
   --data '{"pokemonList": ["pikachu", "drapion"], "language" : "es", "limit" : 5}' \
   https://35.192.16.221/common_moves
   ```
-  > Note: we need to pass the --insecure option because the SSL certificate is not valid.
+  > Note: it is necessary to pass the --insecure option because the SSL certificate is not valid.
 
 
 ## Compare Damage End-Point: 
@@ -351,13 +351,13 @@ Status: 405 - Malformed request
 
 Status: 424 - External resource not responding
 
-# Usage and SDK Sample:
+## Usage and SDK Sample:
 
-## Curl Sample:
+### Curl Sample:
   ```console
     curl --insecure --header "Content-Type: application/json" \
       --request POST \
       --data '{"fighter" : "pikachu", "contender" : "drapion"}' \
       https://35.192.16.221/compare_damage
   ```
-  > Note: we need to pass the --insecure option because the SSL certificate is not valid.
+  > Note: it is necessary to pass the --insecure option because the SSL certificate is not valid.
