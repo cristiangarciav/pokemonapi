@@ -129,3 +129,4 @@ dmypy.json
 .pyre/
 #Comands cheat sheet
 cheat_sheet
+.DS_Store

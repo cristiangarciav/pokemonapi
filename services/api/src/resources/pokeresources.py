@@ -90,7 +90,7 @@ class CommonMoves(Resource):
         if ('pokemonList' not in posted_data) or (
             type(posted_data['pokemonList']) != list) or (
             ('limit' in posted_data) and (posted_data['limit'] != '*') and (
-             not posted_data['limit'].isnumeric())
+             not str(posted_data['limit']).isnumeric())
                 ):
             status_code = 405
             response = ({"Error": "malformed request"}, status_code)
