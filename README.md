@@ -140,10 +140,10 @@ The app has been deployed into Google Cloud infrastructure, by making use of the
 The app has been set up to make use of a CI automated pipeline that pushes all the changes into the github repository and runs a pytest testing scenario. If the build is successful and merged into the "main" branch, it is automatically deployed into the Google Cloud infrastructure.
 
 
-###Pokemon API
-###API and SDK Documentation
+# Pokemon API
+## API and SDK Documentation
 
-#Common moves end-point: 
+## Common moves end-point: 
     Compare shared common moves between a list of pokemon(s)
 
 Methods:
@@ -172,8 +172,10 @@ Parameters:
           example: 10
     }
   ```
-#Responses:
+## Responses:
+
 Status: 200 - successful operation
+
 Schema:
 ```console
  {
@@ -190,7 +192,7 @@ Status: 405 - Malformed request
 
 Status: 424 - External resource not responding
 
-#Compare Damage End-Point: 
+## Compare Damage End-Point: 
     Compare the deal and received damage from two Pokemons
 
 Methods:
@@ -217,8 +219,10 @@ Parameters:
           example: charmander
     }
   ```
-#Responses:
+## Responses:
+
 Status: 200 - successful operation
+
 Schema:
 ```console
       {
