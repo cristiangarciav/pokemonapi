@@ -28,7 +28,8 @@ class ComparePokemon(Resource):
     def get(self) -> tuple:
         """The GET method is not allowed in this endpoint"""
         status_code = 405
-        response = ({"Error": "GET method not allowed"}, status_code)
+        message = "GET method not allowed on this Pokemon API"
+        response = ({"Error": message}, status_code)
         return response
 
     def post(self) -> tuple:
@@ -74,7 +75,8 @@ class CommonMoves(Resource):
         '''Function that process the get requests
         from CommonMoves API resource'''
         status_code = 405
-        response = ({"Error": "GET method not allowed"}, status_code)
+        message = "GET method not allowed on this Pokemon API"
+        response = ({"Error": message}, status_code)
         return response
 
     def post(self) -> tuple:
