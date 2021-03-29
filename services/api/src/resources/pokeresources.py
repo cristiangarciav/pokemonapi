@@ -5,6 +5,10 @@ from src.resources.pokemon import Pokemon, PokemonException, \
 
 
 def get_deal_damage(fighter: Pokemon, contender: Pokemon) -> int:
+    '''
+    Gets the deal damage relationship between two pokemons
+    fighter vs contender
+    '''
     max_damage = 0
     for f_type in fighter.types:
         damage_relations = fighter.get_damage_relations(f_type)
@@ -17,10 +21,14 @@ def get_deal_damage(fighter: Pokemon, contender: Pokemon) -> int:
     return max_damage
 
 
+# Resource that will serve the /compare_damage/ end-point
+
+
 class ComparePokemon(Resource):
     def get(self) -> tuple:
+        """The GET method is not allowed in this endpoint"""
         status_code = 405
-        response = ({"Error": "method not allowed"}, status_code)
+        response = ({"Error": "GET method not allowed"}, status_code)
         return response
 
     def post(self) -> tuple:
@@ -58,12 +66,15 @@ class ComparePokemon(Resource):
             return response
 
 
+# Resource that will serve the /common_moves/ end-point
+
+
 class CommonMoves(Resource):
     def get(self) -> tuple:
         '''Function that process the get requests
         from CommonMoves API resource'''
         status_code = 405
-        response = ({"Error": "method not allowed"}, status_code)
+        response = ({"Error": "GET method not allowed"}, status_code)
         return response
 
     def post(self) -> tuple:

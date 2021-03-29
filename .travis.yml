@@ -36,7 +36,7 @@ script:
   # Building the docker-compose container:
   - docker-compose build
   # Running the pytest scenarios:
-  - docker-compose run api sh -c  "pytest -v . && flake8"
+  - docker-compose run api sh -c  "pytest -v --disable-pytest-warnings . && flake8"
 deploy:
   provider: script
   # If everything goes good we are going to deploy the image into Google Cloud provider

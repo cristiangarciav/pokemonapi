@@ -3,6 +3,9 @@ import json
 import os
 
 
+# Generic functinons necessary to read and write some json data
+# from the Poke Api.
+
 def get_path() -> str:
     try:
         path = os.environ['PYTHONPATH'].split(os.pathsep)[0]

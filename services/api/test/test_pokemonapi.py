@@ -7,6 +7,19 @@ import json
 from flask.testing import FlaskClient
 
 
+# Pytest testing scenarios for validating the API end-points
+# Basic testing the API for:
+# - Correct HTTP status codes
+# - Correct Headers (application/json)
+# - Validate the expected data.
+
+# Since this API is consuming data from a third party API service
+# It is necessary to mock some of the data responses to isolate
+# the testing scenarios.
+# This will help to avoid dependencies from any external factor
+# that can affect the test results
+
+
 @pytest.fixture
 def client() -> FlaskClient:
     '''Gets the testing FlaskClient from the flask app instance'''

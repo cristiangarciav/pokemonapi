@@ -53,6 +53,10 @@ class Pokemon:
         return {str(item[resource.name]['name']) for item in result_types}
 
     def get_damage_relations(self, type_id: str) -> dict:
+        '''
+        Returns the damage_relations based on the pokemon type
+        specified in the type_id variable
+        '''
         multiplier_damage = {
             'no_damage_to': 0,
             'half_damage_to': 0.5,
@@ -92,6 +96,9 @@ def get_resource(resource_type: PokeResource, id_type: str) -> dict:
 
 
 def get_moves_in_language(moves: list, lang: str) -> list:
+    '''Gets the language translation of the moves list,
+        based on the lang variable,
+    '''
     translated_moves = []
     for move_id in moves:
         result_names = get_resource(PokeResource.move, move_id)['names']
